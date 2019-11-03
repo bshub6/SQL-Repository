@@ -1,12 +1,14 @@
 #Dependencies
-from flask import Flask, jsonify
+
+
+
 import numpy as np
-import pandas as pd
 import dateline as dt
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+from flask import Flask, jsonify
 
 
 #################################################
@@ -22,9 +24,8 @@ Base.prepare(engine, reflect=True)
 
 #variables for bases
 measurement = Base.classes.measurement
-station = Bases.classes.station
+station = Base.classes.station
 
-session = Session(engine)
 
 
 #################################################
@@ -94,7 +95,54 @@ def Temperature():
 
 
 
-
-
 if __name__ == '__main__':
     app.run(debug=True)
+    
+    
+    #TRIED VARIOUS METHODS TO GET MY FLASK TO RUN AND KEPT GETTING ERRORS
+    
+      Use a production WSGI server instead.
+ * Debug mode: off
+Usage: flask run [OPTIONS]
+
+Error: Could not import "app".
+
+(env) (base) C:\Users\bdsan\Desktop\flask_app>flask run
+ * Serving Flask app "app.py"
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+Usage: flask run [OPTIONS]
+
+Error: Could not import "app".
+
+(env) (base) C:\Users\bdsan\Desktop\flask_app>set FLASK_APP=run.py
+
+(env) (base) C:\Users\bdsan\Desktop\flask_app>flask run
+ * Serving Flask app "run.py"
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+Usage: flask run [OPTIONS]
+
+Error: Could not import "run".
+
+(env) (base) C:\Users\bdsan\Desktop\flask_app>python -m run.py
+C:\Users\bdsan\Desktop\flask_app\env\Scripts\python.exe: Error while finding module specification for 'run.py' (ModuleNotFoundError: No module named 'run')
+
+(env) (base) C:\Users\bdsan\Desktop\flask_app>$env:FLASK_APP=run.py
+The filename, directory name, or volume label syntax is incorrect.
+
+(env) (base) C:\Users\bdsan\Desktop\flask_app>$ export FLASK_RUN_PORT=8000
+'$' is not recognized as an internal or external command,
+operable program or batch file.
+
+(env) (base) C:\Users\bdsan\Desktop\flask_app>
+
+
+
+
+
+
