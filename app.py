@@ -3,7 +3,6 @@
 
 
 import numpy as np
-import dateline as dt
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -53,15 +52,19 @@ def welcome():
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/start date<br/>"
+        f"/api/v1.0/start/<start><br/>"
+        f'/api/v1.0/start/end/<start>/<end>'
         
-    )
+        
+        
+ )
 #precipation API call
 @app.route("/api/v1.0/precipitation")
 def precipitation():
     
     #Create a session to link Python to the DB
     session = Session(engine)
+    
     last12 = dt.date(2015, 7, 17) - dt.timedelta(days=365)
     precip_query = session.query(measurement.date, measurement.prcp).filter(measurement.date>=last12).all()
     precip =  {dt.date(prcp for date, prcp in precip_query)}
@@ -74,6 +77,9 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
+    #Create a session to link Python to the DB
+    session = Session(engine)
+    
     station_query = session.query(station.station, station.name).all()
     station - list(np.ravel(station_query))
     
@@ -84,6 +90,9 @@ def stations():
 #temp API call
 app.route("/api/v1.0/tobs")
 def Temperature():
+    #Create a session to link Python to the DB
+    session = Session(engine)
+    
     last12 = dt.date(2017, 7, 1) - dt.timedelta(days365)
     temp = session.query(measurement.date, measurement.tobs).filter(measurement.date >= last12).all()
     tobs = list(np.ravel(temp))
@@ -101,48 +110,8 @@ if __name__ == '__main__':
     
     #TRIED VARIOUS METHODS TO GET MY FLASK TO RUN AND KEPT GETTING ERRORS
     
-      Use a production WSGI server instead.
- * Debug mode: off
-Usage: flask run [OPTIONS]
-
-Error: Could not import "app".
-
-(env) (base) C:\Users\bdsan\Desktop\flask_app>flask run
- * Serving Flask app "app.py"
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: off
-Usage: flask run [OPTIONS]
-
-Error: Could not import "app".
-
-(env) (base) C:\Users\bdsan\Desktop\flask_app>set FLASK_APP=run.py
-
-(env) (base) C:\Users\bdsan\Desktop\flask_app>flask run
- * Serving Flask app "run.py"
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: off
-Usage: flask run [OPTIONS]
-
-Error: Could not import "run".
-
-(env) (base) C:\Users\bdsan\Desktop\flask_app>python -m run.py
-C:\Users\bdsan\Desktop\flask_app\env\Scripts\python.exe: Error while finding module specification for 'run.py' (ModuleNotFoundError: No module named 'run')
-
-(env) (base) C:\Users\bdsan\Desktop\flask_app>$env:FLASK_APP=run.py
-The filename, directory name, or volume label syntax is incorrect.
-
-(env) (base) C:\Users\bdsan\Desktop\flask_app>$ export FLASK_RUN_PORT=8000
-'$' is not recognized as an internal or external command,
-operable program or batch file.
-
-(env) (base) C:\Users\bdsan\Desktop\flask_app>
-
-
-
-
+      #Use a production WSGI server instead.
+ #* Debug mode: off
+#Usage: flask run [OPTIONS]
 
 
