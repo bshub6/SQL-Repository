@@ -53,27 +53,11 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/tobs<br/>"
         f"/api/v1.0/start/<start><br/>"
-        f'/api/v1.0/start/end/<start>/<end>'
+        f"/api/v1.0/start/end/<start>/<end>"
         
         
-        
- )
-#precipation API call
-@app.route("/api/v1.0/precipitation")
-def precipitation():
-    
-    #Create a session to link Python to the DB
-    session = Session(engine)
-    
-    last12 = dt.date(2015, 7, 17) - dt.timedelta(days=365)
-    precip_query = session.query(measurement.date, measurement.prcp).filter(measurement.date>=last12).all()
-    precip =  {dt.date(prcp for date, prcp in precip_query)}
-    
-    session.close()
-    
-    return jsonify(precip)
-           
-#station API call
+         )
+ #station API call
 
 @app.route("/api/v1.0/stations")
 def stations():
@@ -86,32 +70,73 @@ def stations():
     session.close()
     
     return jsonify(station)
-
-#temp API call
-app.route("/api/v1.0/tobs")
-def Temperature():
+   
+    
+    
+#precipation API call
+@app.route("/api/v1.0/precipitation")
+def precipitation():
+    
     #Create a session to link Python to the DB
     session = Session(engine)
     
-    last12 = dt.date(2017, 7, 1) - dt.timedelta(days365)
-    temp = session.query(measurement.date, measurement.tobs).filter(measurement.date >= last12).all()
-    tobs = list(np.ravel(temp))
+    last12 = dt.date(2017, 8, 23) - dt.timedelta(days=366)
+    precip_query = session.query(measurement.date, measurement.prcp).filter(measurement.date>=last12).all()
+    precip =  {dt.date(prcp for date, prcp in precip_query)}
     
     session.close()
     
+    return jsonify(precip)
+           
+#station API call
+
+#temp API call
+
+app.route("/api/v1.0/tobs")
+
+def Temperature():
+
+    #Create a session to link Python to the DB
+
+    session = Session(engine)
+
+    last12 = dt.date(2017, 8, 23) - dt.timedelta(days=366)
+    temp = session.query(measurement.date, measurement.tobs).filter(measurement.date >= last12).all()
+    tobs = list(np.ravel(temp))
+
+    
+    session.close()
+
     return jsonify(tobs)
 
+#start date API call
+app.route("/api/v1.0/start")
+def temp_start():
+    #Create a session to link Python to the DB
+    session = Session(engine)
+    
+    start_query = session.query(func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).filter(measurement.date >= start).all()
+    temp = list(np.ravel(start_query))
+    
+    session.close()
+    
+    return jsonify(temp)
 
 
+#date range API Call
+app.route("/api/v1.0/start/end")
+def temp_date_range(start, end):
+    #Create a session to link Python to the DB
+    session = Session(engine)
+    
+    start_end_query = session.query(func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).filter(measurement.date >= start).filter(measurement.date <= end).all()
+    tobs = list(np.ravel(start_end_query))
+    
+    session.close()
+    
+    return jsonify(temp)
 
 if __name__ == '__main__':
     app.run(debug=True)
     
     
-    #TRIED VARIOUS METHODS TO GET MY FLASK TO RUN AND KEPT GETTING ERRORS
-    
-      #Use a production WSGI server instead.
- #* Debug mode: off
-#Usage: flask run [OPTIONS]
-
-
